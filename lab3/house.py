@@ -32,6 +32,8 @@ def draw_house(screen, house_coords, house_width, house_height):
     window_coords = (window_x, window_y)
 
     rect(screen, window_color, (*window_coords, window_width, window_height))
+    rect(screen, (0, 0, 0), (*window_coords, window_width, window_height), 2)
+
 
 
 def draw_tree(screen, tree_coords, tree_trunk_params, tree_crown_params):
@@ -45,6 +47,20 @@ def draw_tree(screen, tree_coords, tree_trunk_params, tree_crown_params):
     crown_color = tree_crown_params[2]
     crown_radius = tree_crown_params[1] / 2
 
+    y_list = [tree_y - crown_radius * (0.4 + i) for i in range(3, 0, -2)]
+    x_list = [tree_x + crown_radius * i/2 + tree_trunk_params[0] * (i/2 + 0.5) for i in range(-1, 2, 2)]
+    x_center = tree_coords[0]
+
+    for y in y_list:
+        circle(screen, crown_color, (x_center, y), crown_radius)
+        circle(screen, (0, 0, 0), (x_center, y), crown_radius, 2)
+
+        for x in x_list:
+            circle(screen, crown_color, (x, y + crown_radius), crown_radius)
+            circle(screen, (0, 0, 0), (x, y + crown_radius), crown_radius, 2)
+
+ 
+    """
     crown_x_four_center = tree_coords[0]
     crown_y_four_center = tree_y - crown_radius * 3.4 
     circle(screen, crown_color, (crown_x_four_center, crown_y_four_center), crown_radius)
@@ -74,13 +90,24 @@ def draw_tree(screen, tree_coords, tree_trunk_params, tree_crown_params):
     crown_y_one_left = tree_y - crown_radius * 0.5
     circle(screen, crown_color, (crown_x_one_left, crown_y_one_left), crown_radius)
     circle(screen, (0, 0, 0), (crown_x_one_left, crown_y_one_left), crown_radius, 2)
-    
+    """
 
 def draw_sun(screen, sun_coords):
     pass
 
 
 def draw_cloud(screen, cloud_color, cloud_coords, cloud_radius):
+    x_list = [cloud_coords[0] + cloud_radius * i for i in range(4)]
+    y_list = [cloud_coords[1] - cloud_radius * i for i in range(2)] 
+
+    for y in y_list:
+        for x in x_list:
+            circle(screen, cloud_color, (x, y), cloud_radius)
+            circle(screen, (0, 0, 0), (x, y), cloud_radius, 1)
+
+        x_list = [cloud_coords[0] + cloud_radius * i for i in range(1, 3)]
+
+    """
     x_1_1 = cloud_coords[0]
     y_1_1 = cloud_coords[1]
     circle(screen, cloud_color, (x_1_1, y_1_1), cloud_radius)
@@ -110,6 +137,8 @@ def draw_cloud(screen, cloud_color, cloud_coords, cloud_radius):
     y_2_2 = cloud_coords[1] - cloud_radius
     circle(screen, cloud_color, (x_2_2, y_2_2), cloud_radius)
     circle(screen, (0, 0, 0), (x_2_2, y_2_2), cloud_radius, 1)
+    """
+
 
 pygame.init()
 
