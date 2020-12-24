@@ -1,3 +1,4 @@
+import math
 import pygame
 from pygame.draw import *
 
@@ -41,14 +42,74 @@ def draw_tree(screen, tree_coords, tree_trunk_params, tree_crown_params):
 
     rect(screen, tree_trunk_color, (tree_x, tree_y, tree_trunk_params[0], tree_trunk_params[1]))
 
+    crown_color = tree_crown_params[2]
+    crown_radius = tree_crown_params[1] / 2
+
+    crown_x_four_center = tree_coords[0]
+    crown_y_four_center = tree_y - crown_radius * 3.4 
+    circle(screen, crown_color, (crown_x_four_center, crown_y_four_center), crown_radius)
+    circle(screen, (0, 0, 0), (crown_x_four_center, crown_y_four_center), crown_radius, 2)
+
+    crown_x_three_left = tree_x - crown_radius * 0.5
+    crown_y_three_left = tree_y - crown_radius * 2.4 
+    circle(screen, crown_color, (crown_x_three_left, crown_y_three_left), crown_radius)
+    circle(screen, (0, 0, 0), (crown_x_three_left, crown_y_three_left), crown_radius, 2)
+
+    crown_x_three_right = tree_x + crown_radius * 0.5 + tree_trunk_params[0]
+    crown_y_three_right = tree_y - crown_radius * 2.4 
+    circle(screen, crown_color, (crown_x_three_right, crown_y_three_right), crown_radius)
+    circle(screen, (0, 0, 0), (crown_x_three_right, crown_y_three_right), crown_radius, 2)
+
+    crown_x_two_center = tree_coords[0]
+    crown_y_two_center = tree_y - crown_radius * 1.4
+    circle(screen, crown_color, (crown_x_two_center, crown_y_two_center), crown_radius)
+    circle(screen, (0, 0, 0), (crown_x_two_center, crown_y_two_center), crown_radius, 2)
+
+    crown_x_one_right = tree_x + crown_radius * 0.5 + tree_trunk_params[0]
+    crown_y_one_right = tree_y - crown_radius * 0.5
+    circle(screen, crown_color, (crown_x_one_right, crown_y_one_right), crown_radius)
+    circle(screen, (0, 0, 0), (crown_x_one_right, crown_y_one_right), crown_radius, 2)
+
+    crown_x_one_left = tree_x - crown_radius * 0.5
+    crown_y_one_left = tree_y - crown_radius * 0.5
+    circle(screen, crown_color, (crown_x_one_left, crown_y_one_left), crown_radius)
+    circle(screen, (0, 0, 0), (crown_x_one_left, crown_y_one_left), crown_radius, 2)
+    
 
 def draw_sun(screen, sun_coords):
     pass
 
 
-def draw_cloud(screen):
-    pass
+def draw_cloud(screen, cloud_color, cloud_coords, cloud_radius):
+    x_1_1 = cloud_coords[0]
+    y_1_1 = cloud_coords[1]
+    circle(screen, cloud_color, (x_1_1, y_1_1), cloud_radius)
+    circle(screen, (0, 0, 0), (x_1_1, y_1_1), cloud_radius, 1)
 
+    x_1_2 = cloud_coords[0] + cloud_radius
+    y_1_2 = cloud_coords[1]
+    circle(screen, cloud_color, (x_1_2, y_1_2), cloud_radius)
+    circle(screen, (0, 0, 0), (x_1_2, y_1_2), cloud_radius, 1)
+
+    x_1_3 = cloud_coords[0] + cloud_radius * 2
+    y_1_3 = cloud_coords[1]
+    circle(screen, cloud_color, (x_1_3, y_1_3), cloud_radius)
+    circle(screen, (0, 0, 0), (x_1_3, y_1_3), cloud_radius, 1)
+ 
+    x_1_4 = cloud_coords[0] + cloud_radius * 3
+    y_1_4 = cloud_coords[1]
+    circle(screen, cloud_color, (x_1_4, y_1_4), cloud_radius)
+    circle(screen, (0, 0, 0), (x_1_4, y_1_4), cloud_radius, 1)
+
+    x_2_1 = cloud_coords[0] + cloud_radius * 1
+    y_2_1 = cloud_coords[1] - cloud_radius
+    circle(screen, cloud_color, (x_2_1, y_2_1), cloud_radius)
+    circle(screen, (0, 0, 0), (x_2_1, y_2_1), cloud_radius, 1)
+
+    x_2_2 = cloud_coords[0] + cloud_radius * 2
+    y_2_2 = cloud_coords[1] - cloud_radius
+    circle(screen, cloud_color, (x_2_2, y_2_2), cloud_radius)
+    circle(screen, (0, 0, 0), (x_2_2, y_2_2), cloud_radius, 1)
 
 pygame.init()
 
@@ -71,7 +132,7 @@ earth_color = (0, 255, 0)
 rect(screen, earth_color, (*earth_coords, earth_width, earth_height))
 rect(screen, sky_color, (*sky_coords, sky_width, sky_height))
 
-# the coordinate of the house is the lower point in the middle  
+# the coordinate of the HOUSE is the lower point in the middle  
 house_x = earth_width * 0.2
 house_y = earth_coords[1] + earth_height / 2
 
@@ -81,29 +142,35 @@ house_width = house_height * 0.8
 
 draw_house(screen, house_coords, house_width, house_height)
 
-# the tree coordinate is the lowest point in the middle
-tree_x = 100
-tree_y = 200
+# the TREE coordinate is the lowest point in the middle
+tree_x = house_x + earth_width * 0.6
+tree_y = earth_coords[1] + earth_height * 0.45
 
 tree_coords = (tree_x, tree_y)
-tree_trunk_height = 30
-tree_trunk_width = 10
+tree_trunk_height = house_height * 0.3
+tree_trunk_width = house_width * 0.09
 tree_trunk_params = (tree_trunk_width, tree_trunk_height)
-tree_crown_height = 20
-tree_crown_width = 20
-tree_crown_color = (0, 0 , 0)
+
+tree_crown_height = house_height * 0.2
+tree_crown_width = house_width * 0.4
+tree_crown_color = (0, 100, 0)
 tree_crown_params = (tree_crown_width, tree_crown_height, tree_crown_color)
 
 draw_tree(screen, tree_coords, tree_trunk_params, tree_crown_params)
 
-#...
+#SUN
 sun_x = 0
 sun_y = 0
 sun_coords = (sun_x, sun_y)
 draw_sun(screen, sun_coords)
 
-#...
-draw_cloud(screen)
+#CLOUD
+cloud_y = sky_height * 0.5
+cloud_x = sky_width * 0.5
+cloud_coords = (cloud_x, cloud_y)
+cloud_color = (255, 255, 255)
+cloud_radius = math.sqrt((disp_width * 0.03) ** 2 + (disp_height * 0.03) ** 2)
+draw_cloud(screen, cloud_color, cloud_coords, cloud_radius)
 
 
 pygame.display.update()
