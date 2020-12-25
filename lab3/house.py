@@ -59,41 +59,56 @@ def draw_tree(screen, tree_coords, tree_trunk_params, tree_crown_params):
             circle(screen, crown_color, (x, y + crown_radius), crown_radius)
             circle(screen, (0, 0, 0), (x, y + crown_radius), crown_radius, 2)
 
- 
-    """
-    crown_x_four_center = tree_coords[0]
-    crown_y_four_center = tree_y - crown_radius * 3.4 
-    circle(screen, crown_color, (crown_x_four_center, crown_y_four_center), crown_radius)
-    circle(screen, (0, 0, 0), (crown_x_four_center, crown_y_four_center), crown_radius, 2)
 
-    crown_x_three_left = tree_x - crown_radius * 0.5
-    crown_y_three_left = tree_y - crown_radius * 2.4 
-    circle(screen, crown_color, (crown_x_three_left, crown_y_three_left), crown_radius)
-    circle(screen, (0, 0, 0), (crown_x_three_left, crown_y_three_left), crown_radius, 2)
+def shift_coord_center(x, y, coords_center):
+    x -= coords_center[0]
+    y -= coords_center[1]
+    return (x, y)
 
-    crown_x_three_right = tree_x + crown_radius * 0.5 + tree_trunk_params[0]
-    crown_y_three_right = tree_y - crown_radius * 2.4 
-    circle(screen, crown_color, (crown_x_three_right, crown_y_three_right), crown_radius)
-    circle(screen, (0, 0, 0), (crown_x_three_right, crown_y_three_right), crown_radius, 2)
 
-    crown_x_two_center = tree_coords[0]
-    crown_y_two_center = tree_y - crown_radius * 1.4
-    circle(screen, crown_color, (crown_x_two_center, crown_y_two_center), crown_radius)
-    circle(screen, (0, 0, 0), (crown_x_two_center, crown_y_two_center), crown_radius, 2)
+def draw_sun(screen, sun_coords, sun_radius):
+    sun_color = (255, 255, 0)
 
-    crown_x_one_right = tree_x + crown_radius * 0.5 + tree_trunk_params[0]
-    crown_y_one_right = tree_y - crown_radius * 0.5
-    circle(screen, crown_color, (crown_x_one_right, crown_y_one_right), crown_radius)
-    circle(screen, (0, 0, 0), (crown_x_one_right, crown_y_one_right), crown_radius, 2)
+    x_center = sun_coords[0]
+    x_left = sun_coords[0] - sun_radius * 0.5
+    x_right = sun_coords[0] + sun_radius * 0.5
+    x_up = sun_coords[0]
 
-    crown_x_one_left = tree_x - crown_radius * 0.5
-    crown_y_one_left = tree_y - crown_radius * 0.5
-    circle(screen, crown_color, (crown_x_one_left, crown_y_one_left), crown_radius)
-    circle(screen, (0, 0, 0), (crown_x_one_left, crown_y_one_left), crown_radius, 2)
-    """
+    y_center = sun_coords[1]
+    y_left = sun_coords[1]
+    y_right = y_left
+    y_up = sun_coords[1] - sun_radius
 
-def draw_sun(screen, sun_coords):
-    pass
+    polygon(screen, sun_color, [(x_up, y_up), (x_left, y_left), (x_right, y_right)])
+    
+    angle_deg = 20
+    angle_radian = angle_deg * math.pi / 180
+    n = 360 // angle_deg
+
+    for _ in range(n):
+        x_up, y_up = shift_coord_center(x_up, y_up, sun_coords)
+        x_left, y_left = shift_coord_center(x_left, y_left, sun_coords)
+        x_right, y_right = shift_coord_center(x_right, y_right, sun_coords)
+        
+        x_up_last, y_up_last = x_up, y_up
+        x_left_last, y_left_last = x_left, y_left
+        x_right_last, y_right_last = x_right, y_right
+
+        x_up = x_up_last * math.cos(angle_radian) + y_up_last * math.sin(angle_radian)
+        y_up = y_up_last * math.cos(angle_radian) - x_up_last * math.sin(angle_radian)
+
+        x_left = x_left_last * math.cos(angle_radian) + y_left_last * math.sin(angle_radian)
+        y_left = y_left_last * math.cos(angle_radian) - x_left_last * math.sin(angle_radian)
+
+        x_right = x_right_last * math.cos(angle_radian) + y_right_last * math.sin(angle_radian)
+        y_right = y_right_last * math.cos(angle_radian) - x_right_last * math.sin(angle_radian)
+
+        x_up, y_up = shift_coord_center(x_up, y_up, (-sun_coords[0], -sun_coords[1]))
+        x_left, y_left = shift_coord_center(x_left, y_left, (-sun_coords[0], -sun_coords[1]))
+        x_right, y_right = shift_coord_center(x_right, y_right, (-sun_coords[0], -sun_coords[1])) 
+        
+        polygon(screen, sun_color, [(x_up, y_up), (x_left, y_left), (x_right, y_right)])
+
 
 
 def draw_cloud(screen, cloud_color, cloud_coords, cloud_radius):
@@ -107,37 +122,6 @@ def draw_cloud(screen, cloud_color, cloud_coords, cloud_radius):
 
         x_list = [cloud_coords[0] + cloud_radius * i for i in range(1, 3)]
 
-    """
-    x_1_1 = cloud_coords[0]
-    y_1_1 = cloud_coords[1]
-    circle(screen, cloud_color, (x_1_1, y_1_1), cloud_radius)
-    circle(screen, (0, 0, 0), (x_1_1, y_1_1), cloud_radius, 1)
-
-    x_1_2 = cloud_coords[0] + cloud_radius
-    y_1_2 = cloud_coords[1]
-    circle(screen, cloud_color, (x_1_2, y_1_2), cloud_radius)
-    circle(screen, (0, 0, 0), (x_1_2, y_1_2), cloud_radius, 1)
-
-    x_1_3 = cloud_coords[0] + cloud_radius * 2
-    y_1_3 = cloud_coords[1]
-    circle(screen, cloud_color, (x_1_3, y_1_3), cloud_radius)
-    circle(screen, (0, 0, 0), (x_1_3, y_1_3), cloud_radius, 1)
- 
-    x_1_4 = cloud_coords[0] + cloud_radius * 3
-    y_1_4 = cloud_coords[1]
-    circle(screen, cloud_color, (x_1_4, y_1_4), cloud_radius)
-    circle(screen, (0, 0, 0), (x_1_4, y_1_4), cloud_radius, 1)
-
-    x_2_1 = cloud_coords[0] + cloud_radius * 1
-    y_2_1 = cloud_coords[1] - cloud_radius
-    circle(screen, cloud_color, (x_2_1, y_2_1), cloud_radius)
-    circle(screen, (0, 0, 0), (x_2_1, y_2_1), cloud_radius, 1)
-
-    x_2_2 = cloud_coords[0] + cloud_radius * 2
-    y_2_2 = cloud_coords[1] - cloud_radius
-    circle(screen, cloud_color, (x_2_2, y_2_2), cloud_radius)
-    circle(screen, (0, 0, 0), (x_2_2, y_2_2), cloud_radius, 1)
-    """
 
 
 pygame.init()
@@ -188,10 +172,11 @@ tree_crown_params = (tree_crown_width, tree_crown_height, tree_crown_color)
 draw_tree(screen, tree_coords, tree_trunk_params, tree_crown_params)
 
 #SUN
-sun_x = 0
-sun_y = 0
+sun_x = 100
+sun_y = 100
 sun_coords = (sun_x, sun_y)
-draw_sun(screen, sun_coords)
+sun_radius = 20
+draw_sun(screen, sun_coords, sun_radius)
 
 #CLOUD
 cloud_y = sky_height * 0.5
