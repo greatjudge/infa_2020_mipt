@@ -22,7 +22,6 @@ def draw_house(screen, house_coords, house_width, house_height):
 
     polygon(screen, roof_color, [point_one, point_two, point_three])
 
-
     window_color = (255, 255, 0)
     
     window_width = wall_width * 0.3
@@ -33,7 +32,6 @@ def draw_house(screen, house_coords, house_width, house_height):
 
     rect(screen, window_color, (*window_coords, window_width, window_height))
     rect(screen, (0, 0, 0), (*window_coords, window_width, window_height), 2)
-
 
 
 def draw_tree(screen, tree_coords, tree_trunk_params, tree_crown_params):
@@ -66,6 +64,15 @@ def shift_coord_center(x, y, coords_center):
     return (x, y)
 
 
+def rotate_vector(x, y, angle):
+    x_last, y_last = x, y
+
+    x = x_last * math.cos(angle) + y_last * math.sin(angle)
+    y = y_last * math.cos(angle) - x_last * math.sin(angle)
+
+    return (x, y)
+
+
 def draw_sun(screen, sun_coords, sun_radius):
     sun_color = (255, 255, 0)
 
@@ -89,26 +96,16 @@ def draw_sun(screen, sun_coords, sun_radius):
         x_up, y_up = shift_coord_center(x_up, y_up, sun_coords)
         x_left, y_left = shift_coord_center(x_left, y_left, sun_coords)
         x_right, y_right = shift_coord_center(x_right, y_right, sun_coords)
-        
-        x_up_last, y_up_last = x_up, y_up
-        x_left_last, y_left_last = x_left, y_left
-        x_right_last, y_right_last = x_right, y_right
 
-        x_up = x_up_last * math.cos(angle_radian) + y_up_last * math.sin(angle_radian)
-        y_up = y_up_last * math.cos(angle_radian) - x_up_last * math.sin(angle_radian)
-
-        x_left = x_left_last * math.cos(angle_radian) + y_left_last * math.sin(angle_radian)
-        y_left = y_left_last * math.cos(angle_radian) - x_left_last * math.sin(angle_radian)
-
-        x_right = x_right_last * math.cos(angle_radian) + y_right_last * math.sin(angle_radian)
-        y_right = y_right_last * math.cos(angle_radian) - x_right_last * math.sin(angle_radian)
+        x_up, y_up = rotate_vector(x_up, y_up, angle_radian)
+        x_left, y_left = rotate_vector(x_left, y_left, angle_radian)
+        x_right, y_right = rotate_vector(x_right, y_right, angle_radian)
 
         x_up, y_up = shift_coord_center(x_up, y_up, (-sun_coords[0], -sun_coords[1]))
         x_left, y_left = shift_coord_center(x_left, y_left, (-sun_coords[0], -sun_coords[1]))
         x_right, y_right = shift_coord_center(x_right, y_right, (-sun_coords[0], -sun_coords[1])) 
         
         polygon(screen, sun_color, [(x_up, y_up), (x_left, y_left), (x_right, y_right)])
-
 
 
 def draw_cloud(screen, cloud_color, cloud_coords, cloud_radius):
@@ -121,7 +118,6 @@ def draw_cloud(screen, cloud_color, cloud_coords, cloud_radius):
             circle(screen, (0, 0, 0), (x, y), cloud_radius, 1)
 
         x_list = [cloud_coords[0] + cloud_radius * i for i in range(1, 3)]
-
 
 
 pygame.init()
@@ -172,8 +168,8 @@ tree_crown_params = (tree_crown_width, tree_crown_height, tree_crown_color)
 draw_tree(screen, tree_coords, tree_trunk_params, tree_crown_params)
 
 #SUN
-sun_x = 100
-sun_y = 100
+sun_x = sky_width * 0.9
+sun_y = sky_height * 0.2
 sun_coords = (sun_x, sun_y)
 sun_radius = 20
 draw_sun(screen, sun_coords, sun_radius)
