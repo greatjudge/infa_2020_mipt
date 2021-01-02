@@ -1,2 +1,2 @@
-# infa_2020_mipt
+# pygame
 it`s save project:
